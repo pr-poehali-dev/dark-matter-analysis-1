@@ -1,4 +1,3 @@
-import { Compass, Lock, Sparkles, ShieldCheck, Wallet, Leaf, Plus, Minus, Mail, Fish, Flame, Anchor, TreePine } from "lucide-react"
 import Icon from "@/components/ui/icon"
 import { Button } from "@/components/ui/button"
 import { useState } from "react"
@@ -10,10 +9,15 @@ interface FAQ {
 
 const Index = () => {
   const [openFaq, setOpenFaq] = useState<number | null>(null)
+  const [showAuth, setShowAuth] = useState(false)
+  const [authTab, setAuthTab] = useState<"login" | "register">("register")
 
   const toggleFaq = (index: number) => {
     setOpenFaq(openFaq === index ? null : index)
   }
+
+  const openLogin = () => { setAuthTab("login"); setShowAuth(true) }
+  const openRegister = () => { setAuthTab("register"); setShowAuth(true) }
 
   const faqs: FAQ[] = [
     {
@@ -75,13 +79,13 @@ const Index = () => {
 
           {/* Action Buttons */}
           <div className="flex items-center gap-3">
-            <a
-              href="#"
+            <button
+              onClick={openLogin}
               className="px-4 py-2 bg-black/40 ring-1 ring-white/20 backdrop-blur rounded-full hover:bg-black/50 transition-colors"
             >
               Войти
-            </a>
-            <Button className="bg-white text-black hover:bg-white/90 rounded-full px-6">Забронировать</Button>
+            </button>
+            <Button onClick={openRegister} className="bg-white text-black hover:bg-white/90 rounded-full px-6">Забронировать</Button>
           </div>
         </nav>
 
@@ -464,6 +468,112 @@ const Index = () => {
           </div>
         </div>
       </footer>
+
+      {/* Auth Modal */}
+      {showAuth && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+          <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" onClick={() => setShowAuth(false)} />
+          <div className="relative w-full max-w-md bg-[#0f1419] ring-1 ring-white/20 rounded-3xl p-8 shadow-2xl">
+            {/* Close */}
+            <button
+              onClick={() => setShowAuth(false)}
+              className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 transition-colors"
+            >
+              <Icon name="X" size={16} />
+            </button>
+
+            {/* Logo */}
+            <div className="flex items-center gap-2 mb-8">
+              <Icon name="Waves" size={20} />
+              <span className="font-semibold text-lg">РекаКама</span>
+            </div>
+
+            {/* Tabs */}
+            <div className="flex gap-1 bg-white/5 rounded-xl p-1 mb-8">
+              <button
+                onClick={() => setAuthTab("login")}
+                className={`flex-1 py-2 rounded-lg text-sm font-medium transition-colors ${authTab === "login" ? "bg-white text-black" : "text-white/60 hover:text-white"}`}
+              >
+                Войти
+              </button>
+              <button
+                onClick={() => setAuthTab("register")}
+                className={`flex-1 py-2 rounded-lg text-sm font-medium transition-colors ${authTab === "register" ? "bg-white text-black" : "text-white/60 hover:text-white"}`}
+              >
+                Зарегистрироваться
+              </button>
+            </div>
+
+            {authTab === "register" ? (
+              <form className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-white/80 mb-2">Имя</label>
+                  <input
+                    type="text"
+                    placeholder="Ваше имя"
+                    className="w-full px-4 py-3 rounded-xl bg-white/5 ring-1 ring-white/20 text-white placeholder:text-white/40 focus:ring-2 focus:ring-white/40 focus:outline-none"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-white/80 mb-2">Телефон</label>
+                  <input
+                    type="tel"
+                    placeholder="+7 (___) ___-__-__"
+                    className="w-full px-4 py-3 rounded-xl bg-white/5 ring-1 ring-white/20 text-white placeholder:text-white/40 focus:ring-2 focus:ring-white/40 focus:outline-none"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-white/80 mb-2">Email</label>
+                  <input
+                    type="email"
+                    placeholder="your@email.com"
+                    className="w-full px-4 py-3 rounded-xl bg-white/5 ring-1 ring-white/20 text-white placeholder:text-white/40 focus:ring-2 focus:ring-white/40 focus:outline-none"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-white/80 mb-2">Пароль</label>
+                  <input
+                    type="password"
+                    placeholder="Придумайте пароль"
+                    className="w-full px-4 py-3 rounded-xl bg-white/5 ring-1 ring-white/20 text-white placeholder:text-white/40 focus:ring-2 focus:ring-white/40 focus:outline-none"
+                  />
+                </div>
+                <Button className="w-full bg-white text-black hover:bg-white/90 rounded-xl py-3 text-base mt-2">
+                  Создать аккаунт
+                </Button>
+              </form>
+            ) : (
+              <form className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-white/80 mb-2">Email</label>
+                  <input
+                    type="email"
+                    placeholder="your@email.com"
+                    className="w-full px-4 py-3 rounded-xl bg-white/5 ring-1 ring-white/20 text-white placeholder:text-white/40 focus:ring-2 focus:ring-white/40 focus:outline-none"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-white/80 mb-2">Пароль</label>
+                  <input
+                    type="password"
+                    placeholder="Ваш пароль"
+                    className="w-full px-4 py-3 rounded-xl bg-white/5 ring-1 ring-white/20 text-white placeholder:text-white/40 focus:ring-2 focus:ring-white/40 focus:outline-none"
+                  />
+                </div>
+                <Button className="w-full bg-white text-black hover:bg-white/90 rounded-xl py-3 text-base mt-2">
+                  Войти
+                </Button>
+                <p className="text-center text-white/50 text-sm">
+                  Нет аккаунта?{" "}
+                  <button type="button" onClick={() => setAuthTab("register")} className="text-white hover:underline">
+                    Зарегистрироваться
+                  </button>
+                </p>
+              </form>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   )
 }
